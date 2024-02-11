@@ -235,7 +235,7 @@ def changeMenu(openMenu):
                 elif keys == keysText:
                     keys = None
 
-                loadedStor = PropertyStorage(name=name, keys=keys)
+                loadedStor = PropertyStorage(name, *keys)
                 fileList.insert("end", loadedStor.name)
 
             def selectedItems(lb: tk.Listbox):
