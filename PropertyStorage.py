@@ -2,7 +2,6 @@ import os.path
 import pickle
 from collections.abc import Iterable
 
-
 # class to store all the properties
 class PropertyStorage:
     allowedKeys = ['personality', 'country', 'job', 'sex']
@@ -50,25 +49,20 @@ class PropertyStorage:
     def getName(self):
         return self.name
 
+    def updateAllowedKeys(self, keys, action):
+        if action == "remove" and keys in self.allowedKeys:
+            self.allowedKeys.remove(keys)
+        if action == "add" and keys not in self.allowedKeys:
+            self.allowedKeys.append(keys)
+
     # add or remove allowed keys from the class
     def setAllowedKeys(self, keys, action="add"):
-        if isinstance(keys, Iterable) and not isinstance(keys, str):
+        if keys is str:
+            self.updateAllowedKeys(keys, action)
+        elif keys is list:
             for key in keys:
-                match action:
-                    case "remove":
-                        if key in self.allowedKeys:
-                            self.allowedKeys.remove(key)
-                    case "add":
-                        if key not in self.allowedKeys:
-                            self.allowedKeys.append(key)
-        elif isinstance(keys, str):
-            match action:
-                case "remove":
-                    if keys in self.allowedKeys:
-                        self.allowedKeys.remove(keys)
-                case "add":
-                    if keys not in self.allowedKeys:
-                        self.allowedKeys.append(keys)
+                self.updateAllowedKeys(keys, action)
+
         self.save()
         self.load()
 
