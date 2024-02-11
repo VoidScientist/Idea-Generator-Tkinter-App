@@ -153,21 +153,13 @@ class PropertyStorage:
 
     # refactor of a portion of setData(), used to add or remove a value to _data
     def actionCheck(self, value, key, action):
-        match action:
-            case "remove":
-                if value in self.data[key]:
-                    self._data[key].remove(value)
-                    self.save()
-                else:
-                    print("Value already not present")
-            case "add":
-                if value not in self.data[key]:
-                    self._data[key].append(value)
-                    self.save()
-                else:
-                    print("Value already registered")
-            case _:
-                print('Invalid action, try again with either "add" or "remove"')
+        # function should return messages according to either value already exists or doesn't or invalid action
+        if action == "remove" and value in self.data[key]:
+            self._data[key].remove(value)
+            self.save()
+        elif action == "add" and value not in self.data[key]:
+            self._data[key].append(value)
+            self.save()
 
     # used to limit case sensitivity
     def lowercase(self, value):
