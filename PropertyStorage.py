@@ -29,22 +29,17 @@ class PropertyStorage:
 
     def load(self):
         # loading the class
-        if os.path.isfile(self.filepath):
-            with open(self.filepath, 'rb') as f:
-                try:
-                    tempData = pickle.load(f)
-                    self.allowedKeys = [key for key in tempData[0]]
-                    self._data = {key: [] for key in self.allowedKeys}
-                    for key in tempData[1]:
-                        for x in tempData[1][key]:
-                            self.setData(x, key)
-                    print("Loaded !", self.filepath)
-                except EOFError:
-                    print("Nothing to load, moving on...")
-        else:
+        if not os.path.isfile(self.filepath):
             open(self.filepath, "x")
+            return
 
-        self.save()
+        with open(self.filepath, 'rb') as f:
+            tempData = pickle.load(f)
+
+            if not tempData:
+                return
+
+            self.allowedKeys, self._data = tempData
 
     def getName(self):
         return self.name
