@@ -14,11 +14,11 @@ class PropertyStorage:
         self.filepath = str("saves/" + name + ".pickle")
 
         # filter what to do with the keys parameter
-        if keys is str:
+        if type(keys) is str:
             self.allowedKeys = keys
             # generate data from allowed key
             self._data = {keys: []}
-        elif keys is list:
+        elif type(keys) is list:
             self.allowedKeys = [key for key in keys]
             # generate data from allowed keys
             self._data = {key: [] for key in self.allowedKeys}
@@ -53,9 +53,9 @@ class PropertyStorage:
 
     # add or remove allowed keys from the class
     def setAllowedKeys(self, keys, action="add"):
-        if keys is str:
+        if type(keys) is str:
             self.updateAllowedKeys(keys, action)
-        elif keys is list:
+        elif type(keys) is list:
             for key in keys:
                 self.updateAllowedKeys(keys, action)
 
@@ -95,7 +95,7 @@ class PropertyStorage:
             print("Wrong input")
 
     def userInterpretKey(self, inp: str):
-        if not inp is str:
+        if not type(inp) is str:
             raise TypeError(f"Argument should be string got: {inp}")
 
         if "&" in inp:
@@ -118,7 +118,7 @@ class PropertyStorage:
 
     # either clear the whole _data or just a specific key
     def clear(self, key=None):
-        if key is None:
+        if not key:
             self._data = {key: [] for key in PropertyStorage.allowedKeys}
             self.save()
         else:
@@ -147,7 +147,7 @@ class PropertyStorage:
         if action == "remove" and value in self.data[key]:
             self._data[key].remove(value)
             self.save()
-        elif action == "add" and value not in self.data[key]:
+        elif action == "add" and not value in self.data[key]:
             self._data[key].append(value)
             self.save()
 
@@ -155,9 +155,9 @@ class PropertyStorage:
     def lowercase(self, value):
         # make the function not case sensitive
 
-        if value is str:
+        if type(value) is str:
             return value.lower()
-        elif value is list:
+        elif type(value) is list:
             return list(map(lambda x: x.lower(), value))
         else:
             print(f"Unexpected value data type detected during while removing case sensibility'", value, type(value))
