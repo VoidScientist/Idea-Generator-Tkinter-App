@@ -13,15 +13,15 @@ class PropertyStorage:
         self.filepath = str("saves/" + name + ".pickle")
 
         # filter what to do with the keys parameter
-        if isinstance(keys, Iterable) and not isinstance(keys, str):
-            self.allowedKeys = [key for key in keys]
-            # generate data from allowed keys
-            self._data = {key: [] for key in self.allowedKeys}
-        elif isinstance(keys, str):
+        if keys is str:
             self.allowedKeys = keys
             # generate data from allowed key
             self._data = {keys: []}
-        elif keys is None:
+        elif keys is list:
+            self.allowedKeys = [key for key in keys]
+            # generate data from allowed keys
+            self._data = {key: [] for key in self.allowedKeys}
+        elif not keys:
             self.allowedKeys = PropertyStorage.allowedKeys
             self._data = {key: [] for key in self.allowedKeys}
 
