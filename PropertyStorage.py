@@ -16,14 +16,14 @@ class PropertyStorage:
         if isinstance(keys, Iterable) and not isinstance(keys, str):
             self.allowedKeys = [key for key in keys]
             # generate data from allowed keys
-            self.__setattr__("_data", {key: [] for key in self.allowedKeys}, self)
+            self._data = {key: [] for key in self.allowedKeys}
         elif isinstance(keys, str):
             self.allowedKeys = keys
             # generate data from allowed key
-            self.__setattr__("_data", {keys: []}, self)
+            self._data = {keys: []}
         elif keys is None:
             self.allowedKeys = PropertyStorage.allowedKeys
-            self.__setattr__("_data", {key: [] for key in self.allowedKeys}, self)
+            self._data = {key: [] for key in self.allowedKeys}
 
         self.load()
 
@@ -34,7 +34,7 @@ class PropertyStorage:
                 try:
                     tempData = pickle.load(f)
                     self.allowedKeys = [key for key in tempData[0]]
-                    self.__setattr__("_data", {key: [] for key in self.allowedKeys}, self)
+                    self._data = {key: [] for key in self.allowedKeys}
                     for key in tempData[1]:
                         for x in tempData[1][key]:
                             self.setData(x, key)
@@ -71,13 +71,6 @@ class PropertyStorage:
         for keys in self.allowedKeys:
             res += f"-{keys}\n"
         return res
-
-    # act according to the attribute being modified
-    def __setattr__(self, key, value, other=None):
-        if key == "_data" and other != self:
-            print("Access refused, use expected/conventional means like --> PropertyStorage.setData()")
-        else:
-            super().__setattr__(key, value)
 
     # interprets user input to then add it to the _data
     def userInterpret(self, input):
@@ -129,7 +122,7 @@ class PropertyStorage:
     # either clear the whole _data or just a specific key
     def clear(self, key=None):
         if key is None:
-            self.__setattr__("_data", {key: [] for key in PropertyStorage.allowedKeys}, self)
+            self._data = {key: [] for key in PropertyStorage.allowedKeys}
             self.save()
         else:
             self._data[key] = []
