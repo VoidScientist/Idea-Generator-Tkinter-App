@@ -170,7 +170,7 @@ class PropertyStorage:
         key = self.lowercase(key)
 
         if key in self.allowedKeys:
-            if self._data[key] is list:
+            if type(self._data[key]) is list:
                 for item in value:
                     self.actionCheck(item, key, action)
             else:
