@@ -172,13 +172,13 @@ class PropertyStorage:
     # used to limit case sensitivity
     def lowercase(self, value):
         # make the function not case sensitive
-        if isinstance(value, Iterable) and not isinstance(value, str):
-            for i in range(len(value)):
-                value[i] = value[i].lower()
-        elif isinstance(value, str):
+        if value is str:
             return value.lower()
+        elif value is list:
+            return list(map(lambda x: x.lower(), value))
         else:
             print(f"Unexpected value data type detected during while removing case sensibility'", value, type(value))
+
         return value
 
     # Setter for the data in the class
