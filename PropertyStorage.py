@@ -8,23 +8,13 @@ class PropertyStorage:
     allowedKeys = ['personality', 'country', 'job', 'sex']
 
     # construct the class
-    def __init__(self, keys=None, name="default"):
+    def __init__(self, name="default", *keys):
         # creating a filepath in order to save the class
         self.name = str(name)
         self.filepath = str("saves/" + name + ".pickle")
 
-        # filter what to do with the keys parameter
-        if type(keys) is str:
-            self.allowedKeys = keys
-            # generate data from allowed key
-            self._data = {keys: []}
-        elif type(keys) is list:
-            self.allowedKeys = [key for key in keys]
-            # generate data from allowed keys
-            self._data = {key: [] for key in self.allowedKeys}
-        elif not keys:
-            self.allowedKeys = PropertyStorage.allowedKeys
-            self._data = {key: [] for key in self.allowedKeys}
+        self.allowedKeys = [key for key in keys]
+        self._data = {key: [] for key in self.allowedKeys}
 
         self.load()
 
@@ -35,7 +25,11 @@ class PropertyStorage:
             return
 
         with open(self.filepath, 'rb') as f:
-            tempData = pickle.load(f)
+            try:
+                 tempData = pickle.load(f)
+            except EOFError:
+                print("pickle sucks")
+                return
 
             if not tempData:
                 return
