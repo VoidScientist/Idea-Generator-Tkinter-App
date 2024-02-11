@@ -154,6 +154,7 @@ class PropertyStorage:
     # used to limit case sensitivity
     def lowercase(self, value):
         # make the function not case sensitive
+
         if value is str:
             return value.lower()
         elif value is list:
