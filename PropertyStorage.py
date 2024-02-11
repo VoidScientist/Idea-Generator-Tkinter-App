@@ -21,6 +21,7 @@ class PropertyStorage:
         # loading the class
         if not os.path.isfile(self.filepath):
             open(self.filepath, "x")
+            self.save()
             return
 
         with open(self.filepath, 'r') as f:
