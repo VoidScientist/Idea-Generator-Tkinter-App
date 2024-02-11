@@ -171,24 +171,12 @@ class PropertyStorage:
         value = self.lowercase(value)
         key = self.lowercase(key)
 
-        # check if key is allowed
         if key in self.allowedKeys:
-            # is the key in data iterable ?
-            if isinstance(self._data[key], Iterable):
-                # is the value iterable and not a string ?
-                if isinstance(value, Iterable) and not isinstance(value, str):
-                    # iterates through the values
-                    for item in value:
-                        # act according to chosen action
-                        self.actionCheck(item, key, action)
-                else:
-                    # act according to chosen action
-                    self.actionCheck(value, key, action)
+            if self._data[key] is list:
+                for item in value:
+                    self.actionCheck(item, key, action)
             else:
-                print("Unexpected datatype in _data, report this to the developer")
-        else:
-            print(
-                f"Exception in 'PropertyStorage -> setData', key: '{key}' not allowed. Try one of those : {PropertyStorage.allowedKeys}")
+                self.actionCheck(value, key, action)
 
     # Save class in a .pickle file
     def save(self):
