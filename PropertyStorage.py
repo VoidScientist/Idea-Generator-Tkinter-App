@@ -2,6 +2,7 @@ import os.path
 import pickle
 from collections.abc import Iterable
 
+
 # class to store all the properties
 class PropertyStorage:
     allowedKeys = ['personality', 'country', 'job', 'sex']
@@ -93,15 +94,16 @@ class PropertyStorage:
         else:
             print("Wrong input")
 
-    def userInterpretKey(self, input):
-        if isinstance(input, str):
-            if "&" in input:
-                actionSepIndex = input.find("&")
-                keys = input[:actionSepIndex].split(",")
-                action = input[actionSepIndex + 1:]
+    def userInterpretKey(self, inp: str):
+        if not inp is str:
+            raise TypeError(f"Argument should be string got: {inp}")
 
-            for i in range(len(keys)):
-                keys[i] = keys[i].strip()
+        if "&" in inp:
+            actionSepIndex = inp.find("&")
+            keys = inp[:actionSepIndex].split(",")
+            action = inp[actionSepIndex + 1:]
+
+            keys = list(map(lambda x: x.strip(), keys))
 
             print(f"{keys}\n{action}")
 
