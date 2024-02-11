@@ -37,7 +37,7 @@ openMenu = Menus.WELCOME
 openEditMenu = EditMenus.EDITVALUES
 
 # software version
-version = "0.3a"
+version = "0.4a"
 
 # window characteristics
 wHeight = 750
@@ -202,9 +202,9 @@ def changeMenu(openMenu):
             def getSaveFiles():
                 res = []
 
-                for files in glob.glob("saves\*.pickle"):
+                for files in glob.glob("saves\*.data"):
                     files = files.removeprefix("saves\\")
-                    files = files.removesuffix(".pickle")
+                    files = files.removesuffix(".data")
                     res.append(files)
                 return res
 
@@ -243,7 +243,7 @@ def changeMenu(openMenu):
 
                 for i in lb.curselection():
                     loadedStor = PropertyStorage(name=lb.get(i))
-                    credit.configure(text=f"Codé par VoidScientist, pour Manada <3 || Version {version} -> Février 2022"
+                    credit.configure(text=f"Codé par VoidScientist || Version {version} -> Février 2024"
                                           f" || Profil ouvert : {loadedStor.getName()}")
 
                 actualLoadedStor.configure(text=f"'{loadedStor.getName()}' chargé.")

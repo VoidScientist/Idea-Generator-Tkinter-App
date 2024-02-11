@@ -1,6 +1,5 @@
 import os.path
-import pickle
-from collections.abc import Iterable
+import json
 
 
 # class to store all the properties
@@ -11,7 +10,7 @@ class PropertyStorage:
     def __init__(self, name="default", *keys):
         # creating a filepath in order to save the class
         self.name = str(name)
-        self.filepath = str("saves/" + name + ".pickle")
+        self.filepath = str("saves/" + name + ".data")
 
         self.allowedKeys = [key for key in keys]
         self._data = {key: [] for key in self.allowedKeys}
@@ -24,17 +23,14 @@ class PropertyStorage:
             open(self.filepath, "x")
             return
 
-        with open(self.filepath, 'rb') as f:
-            try:
-                 tempData = pickle.load(f)
-            except EOFError:
-                print("pickle sucks")
-                return
+        with open(self.filepath, 'r') as f:
 
-            if not tempData:
-                return
+            tempData = json.loads(f.readline())
 
-            self.allowedKeys, self._data = tempData
+            print(tempData)
+
+            self.allowedKeys = tempData["allowedKeys"]
+            self._data = tempData["_data"]
 
     def getName(self):
         return self.name
@@ -47,6 +43,7 @@ class PropertyStorage:
 
     # add or remove allowed keys from the class
     def setAllowedKeys(self, keys, action="add"):
+        print(keys)
         if type(keys) is str:
             self.updateAllowedKeys(keys, action)
         elif type(keys) is list:
@@ -63,20 +60,20 @@ class PropertyStorage:
         return res
 
     # interprets user input to then add it to the _data
-    def userInterpret(self, input):
-        if isinstance(input, str):
-            if ":" in input:
-                keySepIndex = input.find(":")
-                key = input[keySepIndex + 1:]
-                value = input[:keySepIndex].split(",")
+    def userInterpret(self, inp):
+        if type(inp) is str:
+            if ":" in inp:
+                keySepIndex = inp.find(":")
+                key = inp[keySepIndex + 1:]
+                value = inp[:keySepIndex].split(",")
             else:
                 print("Lack of key in the command")
                 return
-            if "&" in input:
-                actionSepIndex = input.find("&")
-                key = input[keySepIndex + 1:actionSepIndex]
-                value = input[:keySepIndex].split(",")
-                action = input[actionSepIndex + 1:]
+            if "&" in inp:
+                actionSepIndex = inp.find("&")
+                key = inp[keySepIndex + 1:actionSepIndex]
+                value = inp[:keySepIndex].split(",")
+                action = inp[actionSepIndex + 1:]
             else:
                 action = "add"
 
@@ -101,7 +98,8 @@ class PropertyStorage:
 
             print(f"{keys}\n{action}")
 
-            self.setAllowedKeys(keys, action)
+            for key in keys:
+                self.setAllowedKeys(key, action)
 
     # print the class
     def toStr(self):
@@ -172,12 +170,12 @@ class PropertyStorage:
 
     # Save class in a .pickle file
     def save(self):
-        with open(self.filepath, 'wb') as f:
-            pickle.dump([self.allowedKeys, self._data], f)
+        with open(self.filepath, 'w') as f:
+            f.write(json.dumps(self.__dict__))
 
     data = property(getData, setData)
 
 
 a = PropertyStorage()
-a.setAllowedKeys("test1", "remove")
+a.setAllowedKeys("test2", "remove")
 print(a.allowedKeys)
